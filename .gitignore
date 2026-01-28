@@ -1,0 +1,8 @@
+deps/
+.oms_credentials
+.env.aws
+.venv/
+BlueprintRelay.log
+*.class
+*.jar
+__pycache__/
