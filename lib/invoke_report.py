@@ -89,11 +89,17 @@ def main():
     # 5. Send Message
     print(f"Sending message to {queue_url}...")
     try:
-        response = sqs.send_message(
-            QueueUrl=queue_url,
-            MessageBody=message_body
-            # Add MessageGroupId or DeduplicationId if it's a FIFO queue
-        )
+        kwargs = {
+            'QueueUrl': queue_url,
+            'MessageBody': message_body
+        }
+        
+        if queue_url.endswith(".fifo"):
+            import time
+            kwargs['MessageGroupId'] = "report_requests"
+            kwargs['MessageDeduplicationId'] = str(time.time())
+            
+        response = sqs.send_message(**kwargs)
         print("✅ Message Sent!")
         print(f"Message ID: {response.get('MessageId')}")
     except Exception as e:
